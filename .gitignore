@@ -1,0 +1,19 @@
+# ignore all
+*
+
+# except for
+!.gitignore
+!scrapy.cfg
+!/tabelogger/
+!/tabelogger/*
+!/tabelogger/__pycache__/
+!/tabelogger/__pycache__/*
+!/tabelogger/spiders/
+!/tabelogger/spiders/*
+!/tabelogger/spiders/__pycache__/
+!/tabelogger/spiders/__pycache__/*
+!tabelogger/__init__.py
+!tabelogger/items.py
+!tabelogger/middlewares.py
+!tabelogger/pipelines.py
+!tabelogger/settings.py
