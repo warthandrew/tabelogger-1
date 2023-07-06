@@ -45,19 +45,37 @@ class KansaiSpider(scrapy.Spider):
 
 
     def parse(self, response):
+        urlvl = url_level(response.url)
 
-        le = LinkExtractor(
-            allow_domains=self.allowed_domains,
-            restrict_xpaths=[
-                '//div[@id="js-leftnavi-area-panels"]/div[@id="tabs-panel-balloon-pref-area"]/div/ul/li',
-                # '//div[@id="js-leftnavi-area-balloon"]/div[@id="js-leftnavi-area-scroll"]/div/ul/li'
-            ]
-        )
+        if urlvl[0] == 1:
+            le = LinkExtractor(
+                allow_domains=self.allowed_domains,
+                restrict_xpaths=[
+                    '//div[@id="js-leftnavi-area-panels"]/div[@id="tabs-panel-balloon-pref-area"]/div/ul/li',
+                    # '//div[@id="js-leftnavi-area-balloon"]/div[@id="js-leftnavi-area-scroll"]/div/ul/li'
+                ]
+            )
+        elif urlvl[0] == 2:
+            le = LinkExtractor(
+                allow_domains=self.allowed_domains,
+                restrict_xpaths=[
+                    # '//div[@id="js-leftnavi-area-panels"]/div[@id="tabs-panel-balloon-pref-area"]/div/ul/li',
+                    '//div[@id="js-leftnavi-area-balloon"]/div[@id="js-leftnavi-area-scroll"]/div/ul/li'
+                ]
+            )
+        else:
+            le = LinkExtractor(
+                allow_domains=self.allowed_domains,
+                restrict_css=[
+                    'h3.list-rst__rst-name'
+                ]
+            )
 
         for link in le.extract_links(response):
             link_list = {}
             link_list['url'] = link.url
             yield link_list
+            yield scrapy.Request(link.url, callback=self.parse)
 
         # entry_dict = {}
 
